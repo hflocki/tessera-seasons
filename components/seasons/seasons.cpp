@@ -145,6 +145,7 @@ class SeasonSaver : public tessera::Saver {
     lv_obj_t *part{};
     int x = 0, y = 0;      // where it stands, kept here: LVGL reads a position as 0 until it lays out
     int fall = 0, wind = 0, size = 0;
+    int w = 0, h = 0;      // its size, kept here too
     int phase = 0, angle = 0, spin = 0;
     bool lit = true;
   };
@@ -186,7 +187,8 @@ class SeasonSaver : public tessera::Saver {
     switch (season_) {
       case WINTER:
         f.size = ui::px(between(3, 7));
-        lv_obj_set_size(p, f.size, f.size);
+        f.w = f.h = f.size;
+        lv_obj_set_size(p, f.w, f.h);
         lv_obj_set_style_radius(p, LV_RADIUS_CIRCLE, 0);
         lv_obj_set_style_bg_color(p, ui::color(theme::INK), 0);
         lv_obj_set_style_bg_opa(p, between(0, 1) ? LV_OPA_COVER : LV_OPA_70, 0);
@@ -196,7 +198,9 @@ class SeasonSaver : public tessera::Saver {
         break;
       case SPRING:
         f.size = ui::px(between(6, 9));
-        lv_obj_set_size(p, f.size, f.size * 3 / 5);
+        f.w = f.size;
+        f.h = f.size * 3 / 5;
+        lv_obj_set_size(p, f.w, f.h);
         lv_obj_set_style_radius(p, f.size / 2, 0);
         lv_obj_set_style_bg_color(p, ui::card_color(between(0, 3) ? tessera::CardColor::PINK
                                                                    : tessera::CardColor::PURPLE), 0);
@@ -207,7 +211,8 @@ class SeasonSaver : public tessera::Saver {
         break;
       case SUMMER:
         f.size = ui::px(between(4, 6));
-        lv_obj_set_size(p, f.size, f.size);
+        f.w = f.h = f.size;
+        lv_obj_set_size(p, f.w, f.h);
         lv_obj_set_style_radius(p, LV_RADIUS_CIRCLE, 0);
         lv_obj_set_style_bg_color(p, ui::card_color(tessera::CardColor::YELLOW), 0);
         f.lit = between(0, 1);
@@ -218,7 +223,9 @@ class SeasonSaver : public tessera::Saver {
         break;
       case AUTUMN: {
         f.size = ui::px(between(9, 13));
-        lv_obj_set_size(p, f.size, f.size * 3 / 5);
+        f.w = f.size;
+        f.h = f.size * 3 / 5;
+        lv_obj_set_size(p, f.w, f.h);
         lv_obj_set_style_radius(p, f.size / 3, 0);
         static const tessera::CardColor LEAVES[] = {tessera::CardColor::ORANGE, tessera::CardColor::RED,
                                                     tessera::CardColor::YELLOW, tessera::CardColor::ORANGE};
@@ -280,7 +287,7 @@ class SeasonSaver : public tessera::Saver {
   // the bottom and passes behind the clock, as if behind it.
   void place(Flake &f) {
     lv_obj_set_pos(f.part, f.x, f.y);
-    const int w = lv_obj_get_style_width(f.part, 0), h = lv_obj_get_style_height(f.part, 0);
+    const int w = f.w, h = f.h;
     const int m = ui::px(4);
     const bool on_glass = f.x >= 0 && f.y >= 0 && f.x + w <= width_ && f.y + h <= height_;
     const bool clear = f.x + w + m < words_.x1 || f.x - m > words_.x2 || f.y + h + m < words_.y1 || f.y - m > words_.y2;
