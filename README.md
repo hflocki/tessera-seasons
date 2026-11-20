@@ -1,4 +1,4 @@
-> In Entwicklung funktioniert aktuell nicht
+> in testing and not working
 
 
 # Seasons
