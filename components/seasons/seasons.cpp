@@ -73,7 +73,7 @@ class SeasonSaver : public tessera::Saver {
     if (picture_ && dim && c.night) {
       lv_obj_t *veil = ui::block(c.parent, theme::PAGE);
       lv_obj_set_style_radius(veil, 0, 0);
-      lv_obj_set_style_bg_opa(veil, LV_OPA_50, 0);
+      lv_obj_set_style_bg_opa(veil, LV_OPA_40, 0);
       lv_obj_set_size(veil, width_, height_);
       lv_obj_set_pos(veil, 0, 0);
     }
@@ -85,13 +85,12 @@ class SeasonSaver : public tessera::Saver {
     const int gap = ui::px(ui::large() ? 10 : 6);
     time_y_ = height_ * (ui::large() ? 10 : 8) / 100;
     time_ = ui::label(c.parent, Font::DIGITS, theme::INK);
-    lv_obj_set_width(time_, width_);
-    lv_obj_set_style_text_align(time_, LV_TEXT_ALIGN_CENTER, 0);
-    lv_obj_set_pos(time_, 0, time_y_);
     line_y_ = time_y_ + ui::line_height(Font::DIGITS) + gap;
     date_ = ui::label(c.parent, Font::TITLE, theme::INK_SOFT);
     temperature_ = ui::label(c.parent, Font::TITLE, theme::MUTED);
     items_y_ = line_y_ + ui::line_height(Font::TITLE) + gap;
+    // Until the time is known, the words' box takes the whole width.
+    words_ = {0, time_y_, width_, items_y_};
     for (int i = 0; i < MAX_ITEMS; i++) {
       icons_[i] = ui::label(c.parent, Font::ICON_SMALL, theme::MUTED);
       texts_[i] = ui::label(c.parent, Font::BODY, theme::MUTED);
@@ -128,8 +127,14 @@ class SeasonSaver : public tessera::Saver {
       }
       const std::string time = tessera::clock_text(epoch);
       // "2:05 PM" has letters the digits' font lacks.
-      ui::set_font(time_, ui::covers(time, Font::DIGITS) ? Font::DIGITS : Font::VALUE);
+      const Font face = ui::covers(time, Font::DIGITS) ? Font::DIGITS : Font::VALUE;
+      ui::set_font(time_, face);
       ui::set_text(time_, time);
+      const int tw = ui::text_width(time, face);
+      lv_obj_set_width(time_, tw > 0 ? tw : 1);
+      lv_obj_set_pos(time_, (width_ - tw) / 2, time_y_);
+      time_w_ = tw;
+      fit_words();
       paint_line();
     }
     step_drift();
@@ -230,8 +235,8 @@ class SeasonSaver : public tessera::Saver {
     f.x = between(0, width_ - f.size);
     if (season_ == SUMMER) f.y = between(h * 40 / 100, h * 92 / 100);
     else f.y = anywhere ? between(-f.size, h) : -f.size - between(0, h / 6);
-    lv_obj_set_pos(p, f.x, f.y);
     if (f.spin) ui::rotate(p, static_cast<float>(f.angle));
+    place(f);
   }
 
   // One step a second: everything falls a little and sways, fireflies wander and blink.
@@ -267,8 +272,20 @@ class SeasonSaver : public tessera::Saver {
           ui::rotate(f.part, static_cast<float>(f.angle));
         }
       }
-      lv_obj_set_pos(f.part, f.x, f.y);
+      place(f);
     }
+  }
+
+  // A flake shows only while it lies whole on the glass and clear of the words: it comes in at the top edge, leaves at
+  // the bottom and passes behind the clock, as if behind it.
+  void place(Flake &f) {
+    lv_obj_set_pos(f.part, f.x, f.y);
+    const int w = lv_obj_get_style_width(f.part, 0), h = lv_obj_get_style_height(f.part, 0);
+    const int m = ui::px(4);
+    const bool on_glass = f.x >= 0 && f.y >= 0 && f.x + w <= width_ && f.y + h <= height_;
+    const bool clear = f.x + w + m < words_.x1 || f.x - m > words_.x2 || f.y + h + m < words_.y1 || f.y - m > words_.y2;
+    if (on_glass && clear) lv_obj_remove_flag(f.part, LV_OBJ_FLAG_HIDDEN);
+    else lv_obj_add_flag(f.part, LV_OBJ_FLAG_HIDDEN);
   }
 
   // The date and the temperature, side by side in the middle under the time.
@@ -285,6 +302,8 @@ class SeasonSaver : public tessera::Saver {
     ui::set_text(temperature_, degrees);
     lv_obj_set_width(temperature_, tw > 0 ? tw : 1);
     lv_obj_set_pos(temperature_, x + dw + space, line_y_);
+    line_w_ = dw + space + tw;
+    fit_words();
   }
 
   // The clock's row of entities: an icon and its words each, in the middle; what does not fit the glass is left out.
@@ -322,9 +341,26 @@ class SeasonSaver : public tessera::Saver {
       lv_obj_remove_flag(texts_[i], LV_OBJ_FLAG_HIDDEN);
       x += widths[i] + apart;
     }
+    items_w_ = total;
+    items_h_ = shown ? row_h : 0;
+    fit_words();
+  }
+
+  // The box of the words: as wide as the widest of the time, the date line and the row, from the time's top to the
+  // foot of the last line that shows.
+  void fit_words() {
+    int widest = time_w_ > line_w_ ? time_w_ : line_w_;
+    if (items_w_ > widest) widest = items_w_;
+    words_.x1 = (width_ - widest) / 2;
+    words_.x2 = words_.x1 + widest;
+    words_.y1 = time_y_;
+    words_.y2 = items_h_ ? items_y_ + items_h_ : items_y_;
   }
 
   int width_ = 0, height_ = 0, time_y_ = 0, line_y_ = 0, items_y_ = 0;
+  // Where the words stand (the time, the date line and the row of entities); the drift keeps clear of it.
+  struct Box { int x1 = 0, y1 = 0, x2 = 0, y2 = 0; } words_;
+  int time_w_ = 0, line_w_ = 0, items_w_ = 0, items_h_ = 0;
   int fixed_ = -1, starts_[4] = {}, count_ = 0, day_ = 0;
   bool south_ = false;
   uint8_t season_ = 0xff;
