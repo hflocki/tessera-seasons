@@ -1,0 +1,71 @@
+# A face of the screensaver's clock with a night scene of the season behind it: snow and a snowman in winter, a tree
+# in blossom in spring, a lighthouse by the sea in summer, glowing pumpkins in autumn, with snowflakes, petals,
+# fireflies or leaves that drift across the glass. Every field is explained in docs/MANIFEST.md of tessera-plugins.
+id: seasons
+version: 1.0.0
+# 0.14: screensavers; 0.26: an option's group; 0.27: ui::rotate for the leaves and petals.
+api: "0.27"
+icon: sun-snowflake-variant
+maintainer: hflocki
+license: MIT
+stage: beta
+topics: [time, fun]
+requires:
+  esphome: 2026.6.2
+boards: any
+flash_kb: 10
+attributes: [cloud]
+# The pictures come from this repository on GitHub, fetched by the app (README, "Privacy").
+privacy: https://github.com/hflocki/tessera-seasons#privacy
+
+permissions:
+  # The seasonal pictures in motifs/ of this repository.
+  network: [raw.githubusercontent.com]
+
+savers:
+  # A face of the clock step: a person picks it under Face in the Clock's drawer of the Screensaver card. Screens
+  # without pictures (the CYD) show the clock and the drifting flakes on the black glass.
+  - id: seasons
+    name: saver_name
+    icon: sun-snowflake-variant
+    step: clock
+    # The picture, a veil, three labels, a row of 4 items (8 labels) and up to 18 small blocks that drift.
+    memory: 3800
+    pictures: 1
+    example: saver_example
+    options:
+      - id: season
+        kind: choice
+        default: auto
+        label: season
+        hint: season_hint
+        choices:
+          - { value: auto, label: season_auto }
+          - { value: winter, label: season_winter }
+          - { value: spring, label: season_spring }
+          - { value: summer, label: season_summer }
+          - { value: autumn, label: season_autumn }
+      - id: start
+        kind: choice
+        default: astronomical
+        label: start
+        hint: start_hint
+        choices:
+          - { value: astronomical, label: start_astronomical }
+          - { value: meteorological, label: start_meteorological }
+      - { id: south, kind: toggle, default: false, label: south, hint: south_hint }
+      - id: drift
+        kind: choice
+        default: few
+        label: drift
+        hint: drift_hint
+        choices:
+          - { value: none, label: drift_none }
+          - { value: few, label: drift_few }
+          - { value: many, label: drift_many }
+      - { id: scene, kind: toggle, default: true, label: scene, hint: scene_hint }
+      - { id: dim, kind: toggle, default: true, label: dim, hint: dim_hint }
+      - { id: spring_start, kind: text, group: group_dates, label: spring_start, hint: date_hint }
+      - { id: summer_start, kind: text, group: group_dates, label: summer_start, hint: date_hint }
+      - { id: autumn_start, kind: text, group: group_dates, label: autumn_start, hint: date_hint }
+      - { id: winter_start, kind: text, group: group_dates, label: winter_start, hint: date_hint }

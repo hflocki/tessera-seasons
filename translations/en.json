@@ -1,0 +1,40 @@
+{
+  "_meta": {
+    "name": "English"
+  },
+  "screen": {},
+  "app": {
+    "name": "Seasons",
+    "summary": "A clock for standby with a night scene of the season: snow, blossom, a summer night by the sea or pumpkins, with flakes and leaves drifting by.",
+    "saver_name": "Seasons",
+    "saver_example": "The time over a snowy night with falling snow",
+    "season": "Season",
+    "season_hint": "Automatic follows the calendar; or keep one season all year.",
+    "season_auto": "Automatic",
+    "season_winter": "Winter",
+    "season_spring": "Spring",
+    "season_summer": "Summer",
+    "season_autumn": "Autumn",
+    "start": "Seasons start",
+    "start_hint": "Astronomical: 20 March, 21 June, 22 September, 21 December. Meteorological: the first of March, June, September and December.",
+    "start_astronomical": "Astronomical",
+    "start_meteorological": "Meteorological",
+    "south": "Southern hemisphere",
+    "south_hint": "Summer around Christmas: the automatic seasons turned round.",
+    "drift": "Drifting",
+    "drift_hint": "Snowflakes, petals, fireflies or leaves that move across the glass once a second.",
+    "drift_none": "Off",
+    "drift_few": "A few",
+    "drift_many": "Many",
+    "scene": "Picture",
+    "scene_hint": "The night scene behind the clock. Off: the clock and the drifting on black.",
+    "dim": "Darker at night",
+    "dim_hint": "A veil over the picture while the screen's night levels hold.",
+    "group_dates": "Dates of your own",
+    "spring_start": "Spring starts",
+    "summer_start": "Summer starts",
+    "autumn_start": "Autumn starts",
+    "winter_start": "Winter starts",
+    "date_hint": "Day and month, such as 1.3. or 03-01. Empty: as Seasons start says."
+  }
+}

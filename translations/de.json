@@ -1,0 +1,40 @@
+{
+  "_meta": {
+    "name": "Deutsch"
+  },
+  "screen": {},
+  "app": {
+    "name": "Jahreszeiten",
+    "summary": "Eine Uhr für den Standby mit einer Nachtszene der Jahreszeit: Schnee, Blüten, eine Sommernacht am Meer oder Kürbisse, dazu fallende Flocken und Blätter.",
+    "saver_name": "Jahreszeiten",
+    "saver_example": "Die Uhrzeit über einer verschneiten Nacht mit fallendem Schnee",
+    "season": "Jahreszeit",
+    "season_hint": "Automatisch folgt dem Kalender; oder eine Jahreszeit das ganze Jahr.",
+    "season_auto": "Automatisch",
+    "season_winter": "Winter",
+    "season_spring": "Frühling",
+    "season_summer": "Sommer",
+    "season_autumn": "Herbst",
+    "start": "Beginn der Jahreszeiten",
+    "start_hint": "Astronomisch: 20. März, 21. Juni, 22. September, 21. Dezember. Meteorologisch: jeweils der 1. März, Juni, September und Dezember.",
+    "start_astronomical": "Astronomisch",
+    "start_meteorological": "Meteorologisch",
+    "south": "Südhalbkugel",
+    "south_hint": "Sommer zu Weihnachten: die automatischen Jahreszeiten umgedreht.",
+    "drift": "Bewegung",
+    "drift_hint": "Schneeflocken, Blüten, Glühwürmchen oder Blätter, die sich einmal pro Sekunde über das Display bewegen.",
+    "drift_none": "Aus",
+    "drift_few": "Wenig",
+    "drift_many": "Viel",
+    "scene": "Bild",
+    "scene_hint": "Die Nachtszene hinter der Uhr. Aus: Uhr und Bewegung auf Schwarz.",
+    "dim": "Nachts dunkler",
+    "dim_hint": "Ein Schleier über dem Bild, solange die Nachthelligkeit des Displays gilt.",
+    "group_dates": "Eigene Termine",
+    "spring_start": "Frühling ab",
+    "summer_start": "Sommer ab",
+    "autumn_start": "Herbst ab",
+    "winter_start": "Winter ab",
+    "date_hint": "Tag und Monat, z. B. 1.3. oder 03-01. Leer: wie bei Beginn der Jahreszeiten."
+  }
+}

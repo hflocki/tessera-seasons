@@ -1,0 +1,25 @@
+# What tools/preview.py shows (docs/PREVIEW.md, "Screensavers"): each season's scene with its drift, and the clock
+# alone on black. The pictures come from motifs/, never from the internet.
+savers:
+  - saver: seasons
+    name: Winter
+    options: { season: winter, drift: many }
+    data: { temperature: "-3°", items: [] }
+  - saver: seasons
+    name: Spring
+    options: { season: spring }
+  - saver: seasons
+    name: Summer
+    options: { season: summer, drift: many }
+  - saver: seasons
+    name: Autumn
+    options: { season: autumn, drift: many }
+  - saver: seasons
+    name: Without picture
+    options: { season: winter, scene: false }
+
+pictures:
+  "https://raw.githubusercontent.com/hflocki/tessera-seasons/main/motifs/winter.png": motifs/winter.png
+  "https://raw.githubusercontent.com/hflocki/tessera-seasons/main/motifs/spring.png": motifs/spring.png
+  "https://raw.githubusercontent.com/hflocki/tessera-seasons/main/motifs/summer.png": motifs/summer.png
+  "https://raw.githubusercontent.com/hflocki/tessera-seasons/main/motifs/autumn.png": motifs/autumn.png
